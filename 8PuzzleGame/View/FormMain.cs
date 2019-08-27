@@ -23,28 +23,41 @@ namespace _8PuzzleGame
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+
             richTextBoxResult.Clear();
             int[,] initState = GenerateInitState();
             int[,] goalState = GenerateGoalState();
 
-            if (verify.DAOUNAODA(initState))
+            int init = initState.Length - initState.Cast<int>().ToList().Distinct().Count();
+            int goal = goalState.Length - goalState.Cast<int>().ToList().Distinct().Count();
+            if (init > 0 | goal > 0)
             {
-            NodeTree tree = new NodeTree(initState);
-            SearchController searchController = new SearchController();
 
-            List<NodeTree> solution = searchController.FirstSearch(tree, goalState);
+                MessageBox.Show("Numeros repetidos não seram aceitos");
 
-    
-                if ( solution.Count > 0) {
-                    solution.Reverse();
-                    for (int i = 0; i < solution.Count; i++)
+            }
+            else
+            {
+
+                if (verify.DAOUNAODA(initState))
+                {
+                    NodeTree tree = new NodeTree(initState);
+                    SearchController searchController = new SearchController();
+
+                    List<NodeTree> solution = searchController.FirstSearch(tree, goalState);
+
+
+                    if (solution.Count > 0)
                     {
-                        PrintNode(solution[i].puzzle);
+                        solution.Reverse();
+                        for (int i = 0; i < solution.Count; i++)
+                        {
+                            PrintNode(solution[i].puzzle);
+                        }
                     }
                 }
+                else { MessageBox.Show("Sem solução"); }
             }
-            else { MessageBox.Show("Sem solução"); }
-
         }
 
         private int[,] GenerateInitState()
@@ -94,5 +107,8 @@ namespace _8PuzzleGame
             richTextBoxResult.AppendText(node[2, 0].ToString() + " " + node[2, 1].ToString() + " " +
                 node[2, 2].ToString() + "\n");
         }
+
+
+
     }
 }
